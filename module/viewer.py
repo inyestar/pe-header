@@ -18,11 +18,12 @@ class Viewer(Tk):
         # Menu
         menu_bar = Menu(self)
         menu_file = Menu(menu_bar)
-        menu_file.add_command(label="New")
-        menu_file.add_command(label="Save")
-        menu_file.add_command(label="Print")
-        menu_file.add_command(label="Exit")
+        # menu_file.add_command(label="New")
+        # menu_file.add_command(label="Save")
+        # menu_file.add_command(label="Print")
+        menu_file.add_command(label="Exit", command=self.exit)
         menu_bar.add_cascade(label="File", menu=menu_file)
+        # menu_bar.bind('<<MenuSelect>>', self.select_menu)
         self.config(menu=menu_bar)
 
         # Var
@@ -30,6 +31,7 @@ class Viewer(Tk):
         self.log = StringVar()
 
         # URL Frame
+        # left, top, right, bottom
         url_frame = ttk.Frame(self, padding="5 5 5 5")
         url_frame.grid(row=0, column=0, columnspan=2, sticky=(N, W, E, S))
         ttk.Label(url_frame, text="URL", width=5).grid(row=0, column=0, padx=5)
@@ -57,7 +59,6 @@ class Viewer(Tk):
         header_tree.pack(fill="both", expand=True)
 
         # Detail List Frame
-        # left, top, right, bottom
         detail_frame = ttk.Frame(self, padding="5 0 5 5")
         detail_frame.grid(row=2, column=1, sticky=(N, W, E, S))
         detail_tree = ttk.Treeview(detail_frame)
@@ -85,6 +86,9 @@ class Viewer(Tk):
         self.status_label = ttk.Label(status_frame, textvariable=self.log, borderwidth=2, relief="groove")
         self.status_label.pack(fill=BOTH)
 
+    def exit(self):
+        self.destroy()
+
     def search(self, *args):
         url = self.url.get()
         self.log.set("requesting...")
@@ -101,5 +105,6 @@ class Viewer(Tk):
         file_name = crawler.save_exe(download_url)
         if file_name:
             parser.read_byte(file_name)
+            # parse하고 나면 self.content로 저장필요
 
 
